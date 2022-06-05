@@ -4,16 +4,15 @@ import Client.Exception.BadRequest;
 import Client.Request.*;
 import Client.Response.HttpResponse;
 import Client.Response.HttpResponseParser;
-import Client.Response.ResponseParserImpl;
 
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class HttpClient {
-    private final HttpRequestBuilder builder=new RequestBuilderImpl();
-    private final HttpRequestSender sender=new RequestSenderImpl();
-    private final HttpResponseParser parser=new ResponseParserImpl();
+    private final HttpRequestBuilder builder=new HttpRequestBuilder();
+    private final HttpRequestSender sender=new HttpRequestSender();
+    private final HttpResponseParser parser=new HttpResponseParser();
 
     public void go() {
         String CRLF="\r\n";

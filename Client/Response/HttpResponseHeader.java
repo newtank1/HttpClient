@@ -1,6 +1,5 @@
 package Client.Response;
 
-import Client.HttpClient;
 
 import java.util.HashMap;
 import java.util.Map;
