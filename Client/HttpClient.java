@@ -9,6 +9,8 @@ import Client.Response.HttpResponseParser;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HttpClient {
     private final HttpRequestBuilder builder=new HttpRequestBuilder();
@@ -16,6 +18,7 @@ public class HttpClient {
     private final HttpResponseParser parser=new HttpResponseParser();
     private final HttpResponseHandler handler=new HttpResponseHandler();
     private final InputStream in;
+    private static final Map<String,String> config;
 
     public HttpClient(InputStream in) {
         this.in = in;
@@ -25,7 +28,7 @@ public class HttpClient {
         String CRLF="\r\n";
         Socket socket=new Socket();
         try {
-            socket.connect(new InetSocketAddress("127.0.0.1", 20000));
+            socket.connect(new InetSocketAddress(config.get("Address"), Integer.parseInt(config.get("Port"))));
             BufferedInputStream bufferedInputStream=new BufferedInputStream(socket.getInputStream());
             BufferedReader consoleReader=new BufferedReader(new InputStreamReader(in));
             HttpRequest request=null;
@@ -47,5 +50,21 @@ public class HttpClient {
 
     public static void main(String[] args) {
         new HttpClient(System.in).go();
+    }
+
+    static {
+        config=new HashMap<>();
+        try {
+            BufferedReader reader=new BufferedReader(new InputStreamReader(new FileInputStream("Config.txt")));
+            String s;
+            while ((s= reader.readLine())!=null){
+                String[] strs=s.split(":",2);
+                config.put(strs[0],strs[1]);
+            }
+            System.out.println("Config loaded");
+        } catch (IOException e) {
+            System.err.println("Failed to load Config.txt");
+            e.printStackTrace();
+        }
     }
 }
