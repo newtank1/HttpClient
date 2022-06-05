@@ -24,7 +24,7 @@ public class HttpResponseHeader {
 
     public HttpResponseHeader(String header) {
         String[] lines = header.split(HttpResponseParser.CRLF);
-        String[] firstLineTokens = lines[0].split(" ");
+        String[] firstLineTokens = lines[0].split(" ",3);
         version = firstLineTokens[0];
         statusCode = Integer.parseInt(firstLineTokens[1]);
         status = firstLineTokens[2];

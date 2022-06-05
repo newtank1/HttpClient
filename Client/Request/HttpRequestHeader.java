@@ -52,12 +52,12 @@ public class HttpRequestHeader {
         return this.version;
     }
 
-    public Map<String, String> getAttributes() {
-        return this.attributes;
-    }
-
     public String getAttribute(String key){
         return attributes.getOrDefault(key.toLowerCase(),null);
+    }
+
+    public void setAttribute(String key,String value){
+        attributes.put(key,value);
     }
 
     protected void putParam(String key,String value){

@@ -3,6 +3,7 @@ package Client;
 import Client.Exception.BadRequest;
 import Client.Request.*;
 import Client.Response.HttpResponse;
+import Client.Response.HttpResponseHandler;
 import Client.Response.HttpResponseParser;
 
 import java.io.*;
@@ -13,6 +14,12 @@ public class HttpClient {
     private final HttpRequestBuilder builder=new HttpRequestBuilder();
     private final HttpRequestSender sender=new HttpRequestSender();
     private final HttpResponseParser parser=new HttpResponseParser();
+    private final HttpResponseHandler handler=new HttpResponseHandler();
+    private final InputStream in;
+
+    public HttpClient(InputStream in) {
+        this.in = in;
+    }
 
     public void go() {
         String CRLF="\r\n";
@@ -20,7 +27,7 @@ public class HttpClient {
         try {
             socket.connect(new InetSocketAddress("127.0.0.1", 20000));
             BufferedInputStream bufferedInputStream=new BufferedInputStream(socket.getInputStream());
-            BufferedReader consoleReader=new BufferedReader(new InputStreamReader(System.in));
+            BufferedReader consoleReader=new BufferedReader(new InputStreamReader(in));
             HttpRequest request=null;
             while (request==null){
                 try {
@@ -30,8 +37,8 @@ public class HttpClient {
                 }
             }
             sender.send(request,socket);
-            HttpResponse response=parser.parseResponse(bufferedInputStream);
-            System.out.println(response);
+            HttpResponse response=parser.parseResponse(bufferedInputStream,request.getUri());
+            handler.handleResponse(response);
             socket.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -39,6 +46,6 @@ public class HttpClient {
     }
 
     public static void main(String[] args) {
-        new HttpClient().go();
+        new HttpClient(System.in).go();
     }
 }

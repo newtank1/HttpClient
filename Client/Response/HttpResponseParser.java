@@ -6,17 +6,17 @@ import java.io.InputStream;
 public class HttpResponseParser {
     static String CRLF="\r\n";
     String CRLFCRLF = "\r\n\r\n";
-    public HttpResponse parseResponse(InputStream inputStream) throws IOException {
+    public HttpResponse parseResponse(InputStream inputStream,String url) throws IOException {
         String headStr=readHeader(inputStream);
         HttpResponseHeader header=new HttpResponseHeader(headStr);
         String lenStr=header.getAttribute("content-length");
-        if(lenStr==null) return new HttpResponse(header,null);
+        if(lenStr==null) return new HttpResponse(header,url,null);
         try{
             byte[] data = inputStream.readNBytes(Integer.parseInt(lenStr.strip()));
-            return new HttpResponse(header,data);
+            return new HttpResponse(header,url,data);
         }catch (RuntimeException e){
             e.printStackTrace();
-            return new HttpResponse(header,null);
+            return new HttpResponse(header,url,null);
         }
     }
     private String readHeader(InputStream inputStream) throws IOException {

@@ -1,6 +1,8 @@
 package Client.Request;
 
+import Client.Cache.Content;
 import Client.Exception.BadRequest;
+import Client.Utils.DateUtil;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -20,6 +22,14 @@ public class HttpRequestBuilder {
         }
         sb.append(CRLF);
         header = new HttpRequestHeader(sb.toString());
+
+        Content content=new Content(header.getUri());
+        if(content.exists()){
+            DateUtil dateUtil=new DateUtil();
+            long lastModified=content.getLastModified();
+            header.setAttribute("if-modified-since", dateUtil.longToDate(lastModified));
+        }
+
         String length=header.getAttribute("content-length");
         if(length!=null){
             int len=Integer.parseInt(length);
@@ -45,4 +55,5 @@ public class HttpRequestBuilder {
         }
         return new HttpRequest(header,null);
     }
+
 }

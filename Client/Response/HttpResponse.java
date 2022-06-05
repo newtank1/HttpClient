@@ -1,24 +1,37 @@
 package Client.Response;
 
-import java.io.IOException;
 
 public class HttpResponse {
     public static final String CRLF="\r\n";
 
-    HttpResponseHeader header;
-    byte[] data;
+    private final HttpResponseHeader header;
+    private String uri;
+    private byte[] data;
 
-    public HttpResponse(HttpResponseHeader header, byte[] data) {
+    public HttpResponse(HttpResponseHeader header, String uri, byte[] data) {
         this.header = header;
+        this.uri = uri;
         this.data = data;
-    }
-
-    public HttpResponse(String version){
-        header=new HttpResponseHeader(version);
     }
 
     public int getStatus(){
         return header.getStatus();
+    }
+
+    public String getAttribute(String key){
+        return header.getAttribute(key);
+    }
+
+    public String getVersion(){
+        return header.version;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public String getUri() {
+        return uri;
     }
 
     @Override
