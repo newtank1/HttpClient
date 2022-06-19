@@ -7,6 +7,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+/**
+* 用于Http请求中几种日期格式和时间戳转换的工具类
+* */
 public class DateUtil {
     public static final String DATE_FORMAT_A="EEE, dd MMM yyyy HH:mm:ss zzz";
     public static final String DATE_FORMAT_B="EEEEEE, dd-MMM-yy HH:mm:ss zzz";

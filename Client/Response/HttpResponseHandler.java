@@ -34,8 +34,8 @@ public class HttpResponseHandler {
         if(response.getStatus()==301||response.getStatus()==302){
             String location=response.getAttribute("location");
             String requestData="GET "+location+" "+response.getVersion()+"\r\n\r\n";
-            HttpClient httpClient = new HttpClient(new ByteArrayInputStream(requestData.getBytes(StandardCharsets.UTF_8)));
-            httpClient.go();
+            HttpClient httpClient = new HttpClient(new ByteArrayInputStream(requestData.getBytes(StandardCharsets.UTF_8)));//重定向处理
+            httpClient.go();//再发送一次请求
         }
     }
 }

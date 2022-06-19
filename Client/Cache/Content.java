@@ -5,10 +5,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+* 表示缓存到本地的文件内容的类
+* */
 public class Content {
     public final String CACHE_PATH="./cache/";
     private String name;
-    private long lastModified;
+    private long lastModified;//最近修改时间
 
     public Content (String name, long lastModified) {
         this.name = name;
@@ -43,7 +46,7 @@ public class Content {
         return new FileInputStream(file);
     }
 
-    public void createContent(byte[] bytes) throws IOException {
+    public void createContent(byte[] bytes) throws IOException {//创建文件并设置最近修改时间
         File file=new File(CACHE_PATH+name);
         if(!file.exists())
             file.createNewFile();

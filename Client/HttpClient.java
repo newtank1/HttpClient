@@ -28,20 +28,20 @@ public class HttpClient {
         String CRLF="\r\n";
         Socket socket=new Socket();
         try {
-            socket.connect(new InetSocketAddress(config.get("Address"), Integer.parseInt(config.get("Port"))));
+            socket.connect(new InetSocketAddress(config.get("Address"), Integer.parseInt(config.get("Port"))));//获取目标地址
             BufferedInputStream bufferedInputStream=new BufferedInputStream(socket.getInputStream());
-            BufferedReader consoleReader=new BufferedReader(new InputStreamReader(in));
+            BufferedReader reader=new BufferedReader(new InputStreamReader(in));//获取输入
             HttpRequest request=null;
             while (request==null){
                 try {
-                    request=builder.buildRequest(consoleReader);
+                    request=builder.buildRequest(reader);//构建请求
                 } catch (BadRequest ignored) {
                     System.out.println("wrong request!");
                 }
             }
-            sender.send(request,socket);
-            HttpResponse response=parser.parseResponse(bufferedInputStream,request.getUri());
-            handler.handleResponse(response);
+            sender.send(request,socket);//发送请求
+            HttpResponse response=parser.parseResponse(bufferedInputStream,request.getUri());//解析响应
+            handler.handleResponse(response);//处理
             socket.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -53,7 +53,7 @@ public class HttpClient {
     }
 
     static {
-        config=new HashMap<>();
+        config=new HashMap<>();//读配置文件
         try {
             BufferedReader reader=new BufferedReader(new InputStreamReader(new FileInputStream("Config.txt")));
             String s;
